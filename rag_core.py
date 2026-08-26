@@ -259,15 +259,15 @@ Réponse :
 
     @tool
     def get_price_petrol() -> list:
-        """Retourne les prix actuels du carburant (gazole) dans différentes villes de France,
+        """Retourne les prix actuels du carburant et leurs types dans différentes villes de France,
         à partir des données officielles data.economie.gouv.fr."""
         url = "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/prix-des-carburants-en-france-flux-instantane-v2/records"
-        params = {"limit": 20}
+        params = {"limit": 100}
         response = requests.get(url, params=params)
         response.raise_for_status()
         data = response.json()
         return [
-            {"ville": s.get("ville"), "prix_gazole": s.get("gazole_prix")}
+            {"ville": s.get("ville"), "prix_gazole": s.get("gazole_prix"), "Type Carburant":s.get({'Gazole'})}
             for s in data["results"]
         ]
 
