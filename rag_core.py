@@ -267,7 +267,7 @@ Réponse :
         response.raise_for_status()
         data = response.json()
         return [
-            {"ville": s.get("ville"), "prix_gazole": s.get("gazole_prix"), "Type Carburant":s.get({'carburants_disponibles'})}
+            {"ville": s.get("ville"), "prix_gazole": s.get("gazole_prix"), "Type Carburant":s.get('carburants_disponibles')}
             for s in data["results"]
         ]
 
