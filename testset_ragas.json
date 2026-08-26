@@ -1,0 +1,42 @@
+[
+  {
+    "question": "Quelles marques sont représentées par le concessionnaire ARTES en Tunisie ?",
+    "ground_truth": "Renault et Dacia"
+  },
+  {
+    "question": "Quelles marques sont représentées par Helios Cars en Tunisie ?",
+    "ground_truth": "BYD"
+  },
+  {
+    "question": "Quelles marques sont représentées par Hyacinth Automotive ?",
+    "ground_truth": "Cenntro et Avantier"
+  },
+  {
+    "question": "Quel est le prix du Nissan Juke Tekna de 2024 avec 43 000 km ?",
+    "ground_truth": "75 000 DT"
+  },
+  {
+    "question": "Quel est le prix du Chery Tiggo 7 PHEV ?",
+    "ground_truth": "à partir de 88 900 DT"
+  },
+  {
+    "question": "Quelles marques sont représentées par le concessionnaire Auto Hall en Tunisie ?",
+    "ground_truth": "Voyah et M-Hero"
+  },
+  {
+    "question": "Quel est le prix de la Suzuki Celerio populaire ?",
+    "ground_truth": "28 457 DT"
+  },
+  {
+    "question": "Quelles marques NIMR représente-t-il en Tunisie ?",
+    "ground_truth": "NIMR représente les marques DFSK et Dongfeng en Tunisie."
+  },
+  {
+    "question": "Quelles marques sont représentées par Dima Pro Cars ?",
+    "ground_truth": "Suzuki"
+  },
+  {
+    "question": "Quels sont les sujets abordés dans le Guide Pratique de l'automobile?",
+    "ground_truth": "Le Guide Pratique aborde les sujets suivants : Dernières immatriculations, Contrat de vente, Voitures électriques et hybrides, Droits de Douane, FCR, Permis de conduire, Convertisseur chevaux fiscaux, Visite technique, Vignette 2026, Voitures populaires."
+  }
+]

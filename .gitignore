@@ -1,0 +1,8 @@
+.env
+.streamlit/secrets.toml
+chroma_db/
+env/
+env_ragas/
+__pycache__/
+PDF.pdf
+passages.parquet
