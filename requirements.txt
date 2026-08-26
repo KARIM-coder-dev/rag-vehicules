@@ -10,7 +10,7 @@ langchain-openai==1.6.0
 langchain-text-splitters==1.1.2
 langgraph==1.2.11
 langsmith
-
+torchvision
 openai
 chromadb
 sentence-transformers
