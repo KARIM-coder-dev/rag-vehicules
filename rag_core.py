@@ -40,7 +40,7 @@ from langgraph.prebuilt import create_react_agent
 # Configuration
 # ============================================================
 
-DOSSIER_DOCS = "/Users/karim/Downloads/DATA_TEST"
+DOSSIER_DOCS = DOSSIER_DOCS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "DATA_TEST")
 CHROMA_DIR = "./chroma_db"
 HASH_FILE = os.path.join(CHROMA_DIR, "source_hash.txt")
 CHUNK_SIZE = 600

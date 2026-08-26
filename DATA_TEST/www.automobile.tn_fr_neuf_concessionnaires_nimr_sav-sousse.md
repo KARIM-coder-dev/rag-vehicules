@@ -1,0 +1,35 @@
+---
+url: "https://www.automobile.tn/fr/neuf/concessionnaires/nimr/sav-sousse"
+title: "SAV SOUSSE - Agent officiel DFSK, Dongfeng en Tunisie"
+---
+
+# SAV SOUSSEAgence officielle NIMR
+
+SAV SOUSSE est un agent agréé de [DFSK](https://www.automobile.tn/fr/neuf/dfsk) et [Dongfeng](https://www.automobile.tn/fr/neuf/dongfeng)
+
+![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138789&y=103066&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138789&y=103067&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138788&y=103066&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138790&y=103066&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138788&y=103067&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138790&y=103067&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138789&y=103065&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138789&y=103068&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138788&y=103065&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138790&y=103065&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138788&y=103068&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138790&y=103068&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138787&y=103066&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138791&y=103066&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138787&y=103067&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138791&y=103067&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138789&y=103064&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138787&y=103065&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138791&y=103065&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138787&y=103068&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138791&y=103068&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138789&y=103069&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138788&y=103064&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138790&y=103064&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138788&y=103069&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138790&y=103069&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138786&y=103066&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138792&y=103066&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138786&y=103067&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138792&y=103067&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138787&y=103064&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138791&y=103064&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138787&y=103069&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138791&y=103069&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138786&y=103065&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138792&y=103065&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138786&y=103068&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138792&y=103068&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138789&y=103063&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138789&y=103070&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138788&y=103063&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138790&y=103063&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138788&y=103070&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138790&y=103070&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138786&y=103064&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138792&y=103064&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138786&y=103069&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138792&y=103069&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138787&y=103063&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138791&y=103063&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138785&y=103066&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138793&y=103066&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138785&y=103067&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138793&y=103067&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138787&y=103070&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138791&y=103070&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138785&y=103065&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138793&y=103065&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138785&y=103068&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138793&y=103068&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138786&y=103063&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138792&y=103063&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138786&y=103070&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138792&y=103070&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138785&y=103064&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138793&y=103064&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138785&y=103069&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138793&y=103069&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138785&y=103063&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138793&y=103063&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138785&y=103070&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=138793&y=103070&z=18)
+
+![](<Base64-Image-Removed>)
+
+![Marker](<Base64-Image-Removed>)
+
+## SAV SOUSSE
+
+251 Route de Tunis
+4011 Hammam-Sousse
+
+[Itinéraire Google Maps](https://www.google.com/maps/dir/?api=1&origin=&destination=35.8588559,10.5982838)
+
+[×](https://www.automobile.tn/fr/neuf/concessionnaires/nimr/sav-sousse#close)
+
+[+](https://www.automobile.tn/fr/neuf/concessionnaires/nimr/sav-sousse# "Zoom in") [−](https://www.automobile.tn/fr/neuf/concessionnaires/nimr/sav-sousse# "Zoom out")
+
+[Afficher ma position actuelle](https://www.automobile.tn/fr/neuf/concessionnaires/nimr/sav-sousse# "Afficher ma position actuelle")
+
+[Leaflet](https://leafletjs.com/ "A JavaScript library for interactive maps") \| Automobile.tn
+
+## Les marques représentées
+
+[![DFSK](https://catalogue.automobile.tn/marques/1602.png)DFSK](https://www.automobile.tn/fr/neuf/dfsk)
+
+[![Dongfeng](https://catalogue.automobile.tn/marques/1640.png)Dongfeng](https://www.automobile.tn/fr/neuf/dongfeng)

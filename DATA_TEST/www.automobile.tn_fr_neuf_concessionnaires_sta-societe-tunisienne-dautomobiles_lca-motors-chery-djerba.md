@@ -1,0 +1,33 @@
+---
+url: "https://www.automobile.tn/fr/neuf/concessionnaires/sta-societe-tunisienne-dautomobiles/lca-motors-chery-djerba"
+title: "LCA MOTORS CHERY Djerba - Agent officiel Chery en Tunisie"
+---
+
+# LCA MOTORS CHERY DjerbaAgence agrée STA - Société Tunisienne d'Automobiles
+
+LCA MOTORS CHERY Djerba est un agent agréé de [Chery](https://www.automobile.tn/fr/neuf/chery)
+
+![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139086&y=104881&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139087&y=104881&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139086&y=104880&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139087&y=104880&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139086&y=104882&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139087&y=104882&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139085&y=104881&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139088&y=104881&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139085&y=104880&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139088&y=104880&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139085&y=104882&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139088&y=104882&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139086&y=104879&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139087&y=104879&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139086&y=104883&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139087&y=104883&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139085&y=104879&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139088&y=104879&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139084&y=104881&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139089&y=104881&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139085&y=104883&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139088&y=104883&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139084&y=104880&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139089&y=104880&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139084&y=104882&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139089&y=104882&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139086&y=104878&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139087&y=104878&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139086&y=104884&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139087&y=104884&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139084&y=104879&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139089&y=104879&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139084&y=104883&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139089&y=104883&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139085&y=104878&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139088&y=104878&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139085&y=104884&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139088&y=104884&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139083&y=104881&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139090&y=104881&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139083&y=104880&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139090&y=104880&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139083&y=104882&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139090&y=104882&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139084&y=104878&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139089&y=104878&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139084&y=104884&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139089&y=104884&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139083&y=104879&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139090&y=104879&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139083&y=104883&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139090&y=104883&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139083&y=104878&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139090&y=104878&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139083&y=104884&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139090&y=104884&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139086&y=104877&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139087&y=104877&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139085&y=104877&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139088&y=104877&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139084&y=104877&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139089&y=104877&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139083&y=104877&z=18)![](https://mt3.google.com/vt/hl=x-local&source=mapmaker&x=139090&y=104877&z=18)
+
+![](<Base64-Image-Removed>)
+
+![Marker](<Base64-Image-Removed>)
+
+## LCA MOTORS CHERY Djerba
+
+Route du phare Km 1
+Djerba Midoun
+
+[Itinéraire Google Maps](https://www.google.com/maps/dir/?api=1&origin=&destination=33.814049,11.007221)
+
+[×](https://www.automobile.tn/fr/neuf/concessionnaires/sta-societe-tunisienne-dautomobiles/lca-motors-chery-djerba#close)
+
+[+](https://www.automobile.tn/fr/neuf/concessionnaires/sta-societe-tunisienne-dautomobiles/lca-motors-chery-djerba# "Zoom in") [−](https://www.automobile.tn/fr/neuf/concessionnaires/sta-societe-tunisienne-dautomobiles/lca-motors-chery-djerba# "Zoom out")
+
+[Afficher ma position actuelle](https://www.automobile.tn/fr/neuf/concessionnaires/sta-societe-tunisienne-dautomobiles/lca-motors-chery-djerba# "Afficher ma position actuelle")
+
+[Leaflet](https://leafletjs.com/ "A JavaScript library for interactive maps") \| Automobile.tn
+
+## Les marques représentées
+
+[![Chery](https://catalogue.automobile.tn/marques/1544.png)Chery](https://www.automobile.tn/fr/neuf/chery)
