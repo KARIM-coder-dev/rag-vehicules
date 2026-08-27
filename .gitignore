@@ -6,3 +6,9 @@ env_ragas/
 __pycache__/
 PDF.pdf
 passages.parquet
+main.py
+eval_data.json
+eval_rag.py
+evale_rag.py
+main_tools.py
+main.py
