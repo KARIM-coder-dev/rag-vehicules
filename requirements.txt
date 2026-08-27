@@ -17,5 +17,5 @@ sentence-transformers
 rank-bm25
 pypdf
 pandas
-geoloc
-streamlit-js
+streamlit-js-eval
+geopy

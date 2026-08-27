@@ -22,7 +22,7 @@ import time
 import hashlib
 import requests
 
-from geopy.distance import geodesic
+from streamlit_js_eval import get_geolocation
 from langchain_community.document_loaders import DirectoryLoader, TextLoader
 from langchain_core.tools import tool
 from langchain_text_splitters import RecursiveCharacterTextSplitter
