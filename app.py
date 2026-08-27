@@ -9,6 +9,9 @@ import uuid
 import streamlit as st
 from rag_core import build_agent, ask_agent
 
+from streamlit_js_eval import get_geolocation
+position = get_geolocation()
+
 st.set_page_config(page_title="Assistant Véhicules", page_icon="🚗", layout="centered")
 
 
@@ -55,21 +58,39 @@ if question:
     st.session_state.messages.append({"role": "user", "content": question})
     with st.chat_message("user"):
         st.markdown(question)
-
+ 
+    # Appelle l'agent avec l'historique précédent (hors le nouveau message,
+    # déjà ajouté juste au-dessus) pour qu'il garde le fil de la conversation
     historique_precedent = st.session_state.messages[:-1]
-
+ 
+    # Enrichit la question avec la position de l'utilisateur si disponible,
+    # pour que l'agent puisse l'utiliser avec get_price_petrol (station la
+    # plus proche). Invisible pour l'utilisateur — juste transmis au LLM.
+    contexte_position = ""
+    if position and position.get("coords"):
+        lat = position["coords"]["latitude"]
+        lon = position["coords"]["longitude"]
+        contexte_position = f"\n\n(Position actuelle de l'utilisateur : latitude={lat}, longitude={lon})"
+ 
+    question_enrichie = question + contexte_position
+ 
     # Appelle l'agent et affiche la réponse
     with st.chat_message("assistant"):
         with st.spinner("Réflexion en cours..."):
             try:
-                reponse = ask_agent(agent, question, session_id=st.session_state.session_id)
+                reponse = ask_agent(
+                    agent,
+                    question_enrichie,
+                    history=historique_precedent,
+                    session_id=st.session_state.session_id
+                )
             except ValueError as e:
                 reponse = f"Question invalide : {e}"
             except Exception as e:
                 reponse = f"Une erreur est survenue : {e}"
-
+ 
         st.markdown(reponse)
-
+ 
     st.session_state.messages.append({"role": "assistant", "content": reponse})
 
 

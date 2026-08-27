@@ -22,6 +22,7 @@ import time
 import hashlib
 import requests
 
+from geopy.distance import geodesic
 from langchain_community.document_loaders import DirectoryLoader, TextLoader
 from langchain_core.tools import tool
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -258,18 +259,46 @@ Réponse :
         return response.json()
 
     @tool
-    def get_price_petrol() -> list:
-        """Retourne les prix actuels du carburant et leurs types dans différentes villes de France,
-        à partir des données officielles data.economie.gouv.fr."""
+    def get_price_petrol(user_lat: float = None, user_lon: float = None, rayon_km: float = 25) -> list:
+        """Retourne les stations-service avec leurs prix (gazole, SP95, SP98), horaires
+        d'ouverture, et distance par rapport à l'utilisateur. Si user_lat/user_lon sont
+        fournis, filtre uniquement les stations dans le rayon donné (25km par défaut),
+        triées de la plus proche à la plus éloignée."""
+        
         url = "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/prix-des-carburants-en-france-flux-instantane-v2/records"
-        params = {"limit": 100}
+        params = {"limit": 100}  # augmente l'échantillon pour avoir des résultats dans le rayon
         response = requests.get(url, params=params)
         response.raise_for_status()
         data = response.json()
-        return [
-            {"ville": s.get("ville"), "prix_gazole": s.get("gazole_prix"), "Type Carburant":s.get('carburants_disponibles')}
-            for s in data["results"]
-        ]
+
+        resultats = []
+        for s in data["results"]:
+            geom = s.get("geom") or {}
+            station_lat = geom.get("lat")
+            station_lon = geom.get("lon")
+
+            distance_km = None
+            if user_lat is not None and user_lon is not None and station_lat and station_lon:
+                distance_km = geodesic((user_lat, user_lon), (station_lat, station_lon)).km
+                if distance_km > rayon_km:
+                    continue  # hors du rayon demandé, on ignore
+
+            resultats.append({
+                "ville": s.get("ville"),
+                "adresse": s.get("adresse"),
+                "prix_gazole": s.get("gazole_prix"),
+                "prix_sp95": s.get("sp95_prix"),
+                "prix_sp98": s.get("sp98_prix"),
+                "carburants_disponibles": s.get("carburants_disponibles"),
+                "horaires_24_24": s.get("horaires_automate_24_24"),
+                "horaires_detail": s.get("horaires"),
+                "distance_km": round(distance_km, 1) if distance_km is not None else None,
+            })
+
+        if user_lat is not None and user_lon is not None:
+            resultats.sort(key=lambda x: x["distance_km"] if x["distance_km"] is not None else float("inf"))
+
+        return resultats
 
     tools = [search_vehicules, get_weather, get_price_petrol]
 
@@ -298,7 +327,29 @@ la conversation, même si l'information semble déjà connue.
 
 Règle stricte n°3 — pas d'invention :
 Si l'outil ne retourne aucune information pertinente, dis clairement que tu ne l'as
-pas trouvée. N'invente jamais une marque, un prix, ou une caractéristique."""
+pas trouvée. N'invente jamais une marque, un prix, ou une caractéristique.
+
+Règle stricte n°4 — réutiliser l'historique quand c'est pertinent :
+Si la question porte sur un sujet déjà discuté plus haut dans la conversation
+(un véhicule déjà cité, une réponse déjà donnée), tu peux répondre directement à
+partir de l'historique SANS rappeler search_vehicules, sauf si un détail précis
+manque et nécessite une nouvelle recherche.
+
+Règle stricte n°5 — demandes de résumé global :
+Si l'utilisateur demande un résumé, un récapitulatif, ou un "bref" de "la
+discussion"/"tout ça"/"la conversation" sans préciser un sujet particulier,
+tu dois résumer L'ENSEMBLE des échanges précédents de la conversation (tous
+les sujets abordés : véhicules, météo, carburant...), pas seulement la
+dernière réponse donnée. 
+
+Règle stricte n°6 :
+Note technique : les questions peuvent contenir en fin de message une ligne du type
+"(Position actuelle de l'utilisateur : latitude=..., longitude=...)". C'est une
+information technique fournie automatiquement pour te permettre de localiser
+l'utilisateur (ex: pour get_price_petrol) — ne la répète JAMAIS dans tes réponses,
+ne mentionne pas les coordonnées GPS brutes à l'utilisateur. Utilise plutôt un nom
+de ville/lieu si tu peux le déduire, ou dis simplement "votre position actuelle"
+sans donner les chiffres."""
 
     agent = create_react_agent(llm, tools, prompt=system_prompt)
 
