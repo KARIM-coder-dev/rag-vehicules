@@ -9,6 +9,15 @@ from pydantic import ValidationError
 from config import Settings
 
 
+@pytest.fixture(autouse=True)
+def env_vierge(monkeypatch):
+    """Isole chaque test de la config de la machine : sans ça, une ligne
+    LLM_MODEL=... dans le .env local ferait échouer (ou réussir) les tests
+    différemment chez chaque développeur et en CI."""
+    for name in Settings.model_fields:
+        monkeypatch.delenv(name.upper(), raising=False)
+
+
 @pytest.fixture
 def env(monkeypatch):
     monkeypatch.setenv("OPENAI_API_KEY", "sk-test-factice")

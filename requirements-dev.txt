@@ -1,2 +1,6 @@
-pytest
-httpx
+# Outils de développement : tests et verrouillage des dépendances.
+#   pip install -r requirements-dev.txt
+-r requirements.txt
+pytest==9.1.1
+httpx==0.28.1
+pip-tools==7.6.1

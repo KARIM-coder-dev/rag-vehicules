@@ -1,0 +1,53 @@
+# Lance toute la chaîne en local, dans les mêmes conditions qu'en production :
+#     docker compose up --build
+#
+# Ordre de démarrage garanti par depends_on :
+#   1. ingest : construit l'index dans le volume (ne fait rien s'il est à jour), puis s'arrête
+#   2. api    : démarre seulement si l'ingestion a réussi
+#   3. front  : démarre seulement quand l'API répond sur /health
+#
+# Interface : http://localhost:8501   API : http://localhost:8000/docs
+
+x-api-image: &api-image
+  build:
+    context: .
+    dockerfile: Dockerfile.api
+  image: rag-vehicules-api
+  env_file: .env
+
+services:
+  ingest:
+    <<: *api-image
+    command: ["python", "ingest.py"]
+    volumes:
+      - index-data:/data
+      - ./DATA_TEST:/docs:ro
+
+  api:
+    <<: *api-image
+    volumes:
+      - index-data:/data
+    ports:
+      - "8000:8000"
+    depends_on:
+      ingest:
+        condition: service_completed_successfully
+
+  front:
+    build:
+      context: .
+      dockerfile: Dockerfile.front
+    image: rag-vehicules-front
+    environment:
+      API_URL: http://api:8000
+    ports:
+      - "8501:8501"
+    depends_on:
+      api:
+        condition: service_healthy
+
+# Volume nommé : l'index survit à l'arrêt et à la reconstruction des conteneurs.
+# Monté sur /data (et non /data/index) pour que ingest.py puisse échanger
+# index.tmp et index dans le même volume.
+volumes:
+  index-data:

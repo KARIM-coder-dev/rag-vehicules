@@ -1,0 +1,33 @@
+# Ce qui n'est JAMAIS envoyé au build Docker.
+# Priorité : les secrets. Une clé copiée dans une image reste lisible par
+# quiconque peut tirer l'image, même si un fichier ultérieur la "supprime".
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+
+# Environnements virtuels et caches locaux (spécifiques au Mac, inutiles sous Linux)
+env/
+env_ragas/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Données : l'index et les documents sont montés en volume, pas embarqués dans l'image
+index/
+index.tmp/
+chroma_db/
+DATA_TEST/
+passages.parquet
+PDF.pdf
+eval_data.json
+
+# Outillage de dev
+.git/
+tests/
+.devcontainer/
+.vscode/
+.claude/
+.agents/
+.DS_Store
