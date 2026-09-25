@@ -321,7 +321,14 @@ sans donner les chiffres."""
     return agent
 
 
-def ask_agent(agent, question: str, history: list | None = None, session_id: str = "default") -> str:
+def ask_agent(
+    agent,
+    question: str,
+    history: list | None = None,
+    session_id: str = "default",
+    location: tuple[float, float] | None = None,
+    channel: str = "api",
+) -> str:
     """
     Pose une question à l'agent déjà construit et retourne uniquement le
     texte de la réponse finale.
@@ -330,14 +337,25 @@ def ask_agent(agent, question: str, history: list | None = None, session_id: str
     [{"role": "user"/"assistant", "content": "..."}], pour que l'agent
     garde le contexte de la conversation (sinon chaque appel est traité
     isolément, sans mémoire des échanges précédents).
+
+    `location` : (latitude, longitude) de l'utilisateur si connue, transmise
+    au LLM pour get_price_petrol (voir règle n°6 du system prompt).
+
+    `channel` : origine de l'appel ("api", "streamlit"...), pour filtrer les
+    traces LangSmith.
     """
-    messages = (history or []) + [{"role": "user", "content": question}]
+    contenu = question
+    if location is not None:
+        lat, lon = location
+        contenu += f"\n\n(Position actuelle de l'utilisateur : latitude={lat}, longitude={lon})"
+
+    messages = (history or []) + [{"role": "user", "content": contenu}]
 
     result = agent.invoke(
         {"messages": messages},
         config={
             "run_name": "rag-agent-query",
-            "tags": ["rag-vehicules", "agent", "streamlit"],
+            "tags": ["rag-vehicules", "agent", channel],
             "metadata": {"question": question, "session_id": session_id},
         }
     )

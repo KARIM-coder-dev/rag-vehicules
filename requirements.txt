@@ -18,3 +18,5 @@ pypdf
 pandas
 streamlit-js-eval
 geopy
+fastapi
+uvicorn[standard]
