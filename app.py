@@ -7,7 +7,7 @@ Lancement :
 
 import uuid
 import streamlit as st
-from rag_core import build_agent, ask_agent
+from rag_core import build_agent, ask_agent, IndexNotReadyError
 
 from streamlit_js_eval import get_geolocation
 position = get_geolocation()
@@ -19,12 +19,16 @@ st.set_page_config(page_title="Assistant Véhicules", page_icon="🚗", layout="
 # Chargement de l'agent — UNE SEULE FOIS par session serveur
 # ============================================================
 
-@st.cache_resource(show_spinner="Chargement de l'agent (indexation si nécessaire)...")
+@st.cache_resource(show_spinner="Chargement de l'agent...")
 def get_agent():
     return build_agent()
 
 
-agent = get_agent()
+try:
+    agent = get_agent()
+except IndexNotReadyError as e:
+    st.error(f"L'index de recherche n'est pas prêt : {e}")
+    st.stop()
 
 
 # ============================================================

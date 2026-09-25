@@ -12,3 +12,5 @@ eval_rag.py
 evale_rag.py
 main_tools.py
 main.py
+index/
+index.tmp/

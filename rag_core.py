@@ -1,15 +1,19 @@
 """
-rag_core.py — Cœur du pipeline RAG (chargement, indexation, retrieval, agent).
+rag_core.py — Côté requête du pipeline RAG (retrieval, reranking, agent).
 
-Ce module ne s'exécute pas directement : il expose des fonctions/objets
-que app.py (Streamlit) importe et réutilise. Toute la logique lourde
-(chargement, embeddings, indexation) est encapsulée dans build_agent(),
-pensée pour être appelée UNE SEULE FOIS grâce au cache Streamlit.
+Ce module NE construit PAS l'index : il lit celui produit par ingest.py
+(dossier index/). Si l'index est absent ou incompatible avec la config,
+build_agent() échoue immédiatement avec un message explicite plutôt que
+de réindexer en silence au démarrage de l'application.
+
+Il ne dépend d'aucune interface : app.py (Streamlit) aujourd'hui, une API
+demain, peuvent l'importer de la même façon.
 """
 
 from dotenv import load_dotenv
 load_dotenv()
 
+import json
 import os
 
 if os.getenv("LANGCHAIN_TRACING_V2") == "true":
@@ -17,15 +21,10 @@ if os.getenv("LANGCHAIN_TRACING_V2") == "true":
 else:
     print("LangSmith désactivé (LANGCHAIN_TRACING_V2 absent ou différent de 'true' dans le .env)")
 
-import os
-import time
-import hashlib
 import requests
 from geopy.distance import geodesic
-from streamlit_js_eval import get_geolocation
-from langchain_community.document_loaders import DirectoryLoader, TextLoader
+from langchain_core.documents import Document
 from langchain_core.tools import tool
-from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_community.vectorstores import Chroma
 from langchain_classic.retrievers import BM25Retriever, EnsembleRetriever
@@ -36,86 +35,50 @@ from langchain_core.output_parsers import StrOutputParser
 from sentence_transformers import CrossEncoder
 from langgraph.prebuilt import create_react_agent
 
-
-# ============================================================
-# Configuration
-# ============================================================
-
-DOSSIER_DOCS = DOSSIER_DOCS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "DATA_TEST")
-CHROMA_DIR = "./chroma_db"
-HASH_FILE = os.path.join(CHROMA_DIR, "source_hash.txt")
-CHUNK_SIZE = 600
-CHUNK_OVERLAP = 60
-EMBEDDING_MODEL = "text-embedding-3-large"
+from config import CHROMA_DIR, CHUNKS_FILE, COLLECTION_NAME, EMBEDDING_MODEL, MANIFEST_FILE
 
 
 # ============================================================
-# Fonctions internes — chargement, chunking, cache, indexation
+# Fonctions internes — lecture de l'index produit par ingest.py
 # ============================================================
 
-def _get_folder_hash(folder_path, extension=".md", chunk_size=600, chunk_overlap=60, embedding_model="text-embedding-3-large"):
-    hash_md5 = hashlib.md5()
-    config = f"{chunk_size}_{chunk_overlap}_{embedding_model}"
-    hash_md5.update(config.encode("utf-8"))
-
-    for root, _, files in sorted(os.walk(folder_path)):
-        for filename in sorted(files):
-            if filename.endswith(extension):
-                filepath = os.path.join(root, filename)
-                with open(filepath, "rb") as f:
-                    hash_md5.update(f.read())
-
-    return hash_md5.hexdigest()
+class IndexNotReadyError(RuntimeError):
+    """L'index est absent ou a été construit avec une autre configuration."""
 
 
-def _load_and_chunk_documents():
-    loader = DirectoryLoader(
-        DOSSIER_DOCS,
-        glob="**/*.md",
-        loader_cls=TextLoader,
-        loader_kwargs={"encoding": "utf-8"}
-    )
-    documents = loader.load()
+def _check_manifest():
+    if not os.path.exists(MANIFEST_FILE):
+        raise IndexNotReadyError(
+            "Index introuvable. Lance d'abord l'ingestion : python ingest.py"
+        )
+    with open(MANIFEST_FILE, "r", encoding="utf-8") as f:
+        manifest = json.load(f)
 
-    splitter = RecursiveCharacterTextSplitter(
-        chunk_size=CHUNK_SIZE,
-        chunk_overlap=CHUNK_OVERLAP,
-    )
-    chunks = splitter.split_documents(documents)
+    # Interroger un index avec un autre modèle d'embedding que celui qui l'a
+    # construit ne plante pas : ça renvoie juste de mauvais résultats. On bloque.
+    if manifest.get("embedding_model") != EMBEDDING_MODEL:
+        raise IndexNotReadyError(
+            f"Index construit avec {manifest.get('embedding_model')}, "
+            f"config actuelle : {EMBEDDING_MODEL}. Relance : python ingest.py --force"
+        )
+    return manifest
+
+
+def _load_chunks():
+    chunks = []
+    with open(CHUNKS_FILE, "r", encoding="utf-8") as f:
+        for line in f:
+            record = json.loads(line)
+            chunks.append(Document(page_content=record["page_content"], metadata=record["metadata"]))
     return chunks
 
 
-def _build_vectorstore(chunks, embeddings):
-    current_hash = _get_folder_hash(
-        DOSSIER_DOCS,
-        chunk_size=CHUNK_SIZE,
-        chunk_overlap=CHUNK_OVERLAP,
-        embedding_model=EMBEDDING_MODEL
+def _load_vectorstore(embeddings):
+    return Chroma(
+        collection_name=COLLECTION_NAME,
+        embedding_function=embeddings,
+        persist_directory=CHROMA_DIR,
     )
-
-    needs_reindex = True
-    if os.path.exists(HASH_FILE):
-        with open(HASH_FILE, "r") as f:
-            if f.read().strip() == current_hash:
-                needs_reindex = False
-
-    if needs_reindex:
-        os.makedirs(CHROMA_DIR, exist_ok=True)
-        vectorstore = Chroma(embedding_function=embeddings, persist_directory=CHROMA_DIR)
-
-        batch_size = 1000
-        for i in range(0, len(chunks), batch_size):
-            batch = chunks[i:i + batch_size]
-            vectorstore.add_documents(batch)
-            time.sleep(1)
-
-        with open(HASH_FILE, "w") as f:
-            f.write(current_hash)
-    else:
-        vectorstore = Chroma(embedding_function=embeddings, persist_directory=CHROMA_DIR)
-
-    return vectorstore
-
 
 def _sanitize_docs(docs):
     suspicious = [
@@ -177,16 +140,18 @@ def validate_question(question: str) -> str:
 
 def build_agent():
     """
-    Construit tout le pipeline RAG (chargement, indexation, retrievers,
-    reranker, tools, agent) et retourne l'agent prêt à l'emploi.
+    Construit le pipeline de requête (retrievers, reranker, tools, agent) à
+    partir de l'index existant et retourne l'agent prêt à l'emploi.
 
-    Coûteux à l'exécution (charge le modèle de reranking, indexe si besoin) —
-    ne doit être appelé qu'une seule fois par session d'application.
+    Ne fait aucun appel d'embedding sur le corpus : l'indexation est le rôle
+    de ingest.py. Reste coûteux (charge le modèle de reranking) — à appeler
+    une seule fois par process.
     """
-    chunks = _load_and_chunk_documents()
+    _check_manifest()
+    chunks = _load_chunks()
 
     embeddings = OpenAIEmbeddings(model=EMBEDDING_MODEL)
-    vectorstore = _build_vectorstore(chunks, embeddings)
+    vectorstore = _load_vectorstore(embeddings)
 
     bm25_retriever = BM25Retriever.from_documents(chunks)
     bm25_retriever.k = 50
