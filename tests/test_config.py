@@ -26,16 +26,16 @@ def env(monkeypatch):
 
 def test_valeurs_par_defaut(env):
     s = Settings()
-    assert s.llm_model == "gpt-4o-mini"
+    assert s.llm_model == "gpt-4o"
     assert s.retriever_k == 50
     assert s.manifest_file.name == "manifest.json"
 
 
 def test_surcharge_par_variable_d_environnement(env):
-    env.setenv("LLM_MODEL", "gpt-4o")
+    env.setenv("LLM_MODEL", "gpt-4o-mini")
     env.setenv("RETRIEVER_K", "30")
     s = Settings()
-    assert s.llm_model == "gpt-4o"
+    assert s.llm_model == "gpt-4o-mini"
     assert s.retriever_k == 30
 
 

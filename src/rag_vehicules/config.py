@@ -42,7 +42,7 @@ class Settings(BaseSettings):
     embedding_model: str = "text-embedding-3-large"
 
     # --- Requête : modifiables sans réindexer --------------------------------
-    llm_model: str = "gpt-4o-mini"
+    llm_model: str = "gpt-4o"
     llm_temperature: float = Field(0.3, ge=0, le=2)
     llm_timeout_s: float = Field(60, gt=0)
     llm_max_retries: int = Field(2, ge=0)
