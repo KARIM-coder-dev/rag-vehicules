@@ -20,7 +20,6 @@ rag-vehicules/
 │   └── index/              Index généré par l'ingestion (non versionné)
 ├── docker/                 Dockerfile.api (API + ingestion), Dockerfile.front
 ├── requirements/           Dépendances : *.in édités à la main, *.txt verrouillés (pip-tools)
-├── legacy/                 Ancien code, conservé pour référence, non maintenu
 ├── compose.yaml            Toute la chaîne en local : ingest → api → front
 ├── pyproject.toml          Métadonnées du package et configuration pytest
 └── .env.example            Liste des variables de configuration
