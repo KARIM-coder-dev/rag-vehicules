@@ -1,8 +1,8 @@
 """
-rag_core.py — Côté requête du pipeline RAG (retrieval, reranking, agent).
+core.py — Côté requête du pipeline RAG (retrieval, reranking, agent).
 
 Ce module NE construit PAS l'index : il lit celui produit par ingest.py
-(dossier index/). Si l'index est absent ou incompatible avec la config,
+(dossier data/index/). Si l'index est absent ou incompatible avec la config,
 build_agent() échoue immédiatement avec un message explicite plutôt que
 de réindexer en silence au démarrage de l'application.
 
@@ -28,7 +28,7 @@ from langchain_core.output_parsers import StrOutputParser
 from sentence_transformers import CrossEncoder
 from langgraph.prebuilt import create_react_agent
 
-from config import Settings, get_settings
+from rag_vehicules.config import Settings, get_settings
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +45,7 @@ def load_manifest(settings: Settings) -> dict:
     """Lit le manifest de l'index et vérifie qu'il est compatible avec la config."""
     if not settings.manifest_file.exists():
         raise IndexNotReadyError(
-            "Index introuvable. Lance d'abord l'ingestion : python ingest.py"
+            "Index introuvable. Lance d'abord l'ingestion : python -m rag_vehicules.ingest"
         )
     with open(settings.manifest_file, "r", encoding="utf-8") as f:
         manifest = json.load(f)
@@ -56,7 +56,7 @@ def load_manifest(settings: Settings) -> dict:
         if manifest.get(key) != getattr(settings, key):
             raise IndexNotReadyError(
                 f"Index construit avec {key}={manifest.get(key)}, "
-                f"config actuelle : {getattr(settings, key)}. Relance : python ingest.py --force"
+                f"config actuelle : {getattr(settings, key)}. Relance : python -m rag_vehicules.ingest --force"
             )
     return manifest
 

@@ -1,8 +1,8 @@
 # Image de l'API et de l'ingestion (même code, deux commandes) :
 #   API        : commande par défaut (uvicorn)
-#   ingestion  : docker run ... rag-vehicules-api python ingest.py
+#   ingestion  : docker run ... rag-vehicules-api python -m rag_vehicules.ingest
 #
-# Construction :  docker build -f Dockerfile.api -t rag-vehicules-api .
+# Construction :  docker build -f docker/Dockerfile.api -t rag-vehicules-api .
 
 FROM python:3.13-slim
 
@@ -19,14 +19,14 @@ RUN useradd --create-home --uid 1000 app \
  && mkdir -p /opt/hf /data \
  && chown app:app /opt/hf /data
 
-# --- 1. Dépendances (couche mise en cache tant que requirements-api.txt ne change pas) ---
-COPY requirements-api.txt .
+# --- 1. Dépendances (couche mise en cache tant que requirements/api.txt ne change pas) ---
+COPY requirements/api.txt requirements.txt
 # torch CPU d'abord, depuis l'index PyTorch : ~5x plus léger que la version CUDA
 # installée par défaut sous Linux, inutile ici (pas de GPU). Les versions sont
 # lues dans le fichier verrouillé pour n'avoir qu'une seule source de vérité.
-RUN pip install $(grep -E '^(torch|torchvision)==' requirements-api.txt) \
+RUN pip install $(grep -E '^(torch|torchvision)==' requirements.txt) \
         --index-url https://download.pytorch.org/whl/cpu \
- && pip install -r requirements-api.txt
+ && pip install -r requirements.txt
 
 # --- 2. Modèle de reranking téléchargé au build, pas au démarrage ---
 # Le conteneur démarre ensuite sans accès à Hugging Face : plus rapide, et
@@ -39,11 +39,12 @@ ENV HF_HUB_OFFLINE=1 \
     RERANKER_MODEL=${RERANKER_MODEL}
 
 # --- 3. Code (en dernier : modifier le code ne réinstalle pas les dépendances) ---
-COPY --chown=app:app config.py rag_core.py api.py ingest.py ./
+COPY --chown=app:app src/ ./src/
 
 # L'index vit dans un volume monté sur /data ; les documents sources sur /docs
 ENV INDEX_DIR=/data/index \
-    DOCS_DIR=/docs
+    DOCS_DIR=/docs \
+    PYTHONPATH=/app/src
 
 EXPOSE 8000
 
@@ -52,4 +53,4 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=90s --retries=3 \
 
 # Un seul worker : chaque worker chargerait sa propre copie du reranker (~1 Go).
 # On monte en charge en ajoutant des conteneurs, pas des workers.
-CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "rag_vehicules.api:app", "--host", "0.0.0.0", "--port", "8000"]

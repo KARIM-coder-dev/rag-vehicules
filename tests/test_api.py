@@ -11,7 +11,7 @@ from types import SimpleNamespace
 import pytest
 from fastapi.testclient import TestClient
 
-import api
+from rag_vehicules import api
 
 FAKE_MANIFEST = {"indexed_at": "2026-01-01T00:00:00+00:00", "nb_chunks": 3, "embedding_model": "fake"}
 

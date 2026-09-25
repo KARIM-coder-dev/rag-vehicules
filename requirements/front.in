@@ -1,9 +1,9 @@
-# Dépendances directes de l'interface Streamlit (app.py) — simple client HTTP de l'API.
+# Dépendances directes de l'interface Streamlit (frontend/app.py) — simple client HTTP de l'API.
 # Fichier verrouillé généré par :
-#     pip-compile requirements-front.in --strip-extras
+#     pip-compile front.in   (depuis le dossier requirements/) --strip-extras
 # La contrainte ci-dessous aligne les dépendances communes (uvicorn, requests...)
 # sur celles de l'API, pour qu'un seul environnement de dev puisse contenir les deux.
--c requirements-api.txt
+-c api.txt
 
 streamlit==1.62.0
 streamlit-js-eval==1.0.0

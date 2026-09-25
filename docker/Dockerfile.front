@@ -1,6 +1,6 @@
 # Image de l'interface Streamlit : simple client HTTP de l'API, sans modèle ni clé OpenAI.
 #
-# Construction :  docker build -f Dockerfile.front -t rag-vehicules-front .
+# Construction :  docker build -f docker/Dockerfile.front -t rag-vehicules-front .
 # Lancement    :  docker run -p 8501:8501 -e API_URL=http://<api>:8000 rag-vehicules-front
 
 FROM python:3.13-slim
@@ -14,10 +14,10 @@ WORKDIR /app
 
 RUN useradd --create-home --uid 1000 app
 
-COPY requirements-front.txt .
-RUN pip install -r requirements-front.txt
+COPY requirements/front.txt requirements.txt
+RUN pip install -r requirements.txt
 
-COPY --chown=app:app app.py ./
+COPY --chown=app:app frontend/app.py ./
 
 USER app
 EXPOSE 8501

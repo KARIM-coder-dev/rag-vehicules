@@ -19,11 +19,12 @@ from dotenv import load_dotenv
 from pydantic import Field, SecretStr, model_validator
 from pydantic_settings import BaseSettings
 
-BASE_DIR = Path(__file__).resolve().parent
+# Racine du projet : src/rag_vehicules/config.py -> remonte de deux niveaux
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 # Charge .env dans os.environ (sans écraser les variables déjà définies) :
 # LangSmith lit ses propres variables LANGCHAIN_* directement dans l'environnement.
-load_dotenv(BASE_DIR / ".env")
+load_dotenv(PROJECT_ROOT / ".env")
 
 
 class Settings(BaseSettings):
@@ -32,9 +33,9 @@ class Settings(BaseSettings):
     # min_length : une variable présente mais vide (OPENAI_API_KEY=) est refusée aussi.
     openai_api_key: SecretStr = Field(min_length=1)
 
-    # --- Ingestion : changer une de ces valeurs impose de relancer ingest.py --
-    docs_dir: Path = BASE_DIR / "DATA_TEST"
-    index_dir: Path = BASE_DIR / "index"
+    # --- Ingestion : changer une de ces valeurs impose de relancer l'ingestion --
+    docs_dir: Path = PROJECT_ROOT / "data" / "docs"
+    index_dir: Path = PROJECT_ROOT / "data" / "index"
     collection_name: str = "vehicules"
     chunk_size: int = Field(600, gt=0)
     chunk_overlap: int = Field(60, ge=0)

@@ -1,16 +1,19 @@
+# Secrets
 .env
 .streamlit/secrets.toml
-chroma_db/
+
+# Environnements virtuels et caches
 env/
-env_ragas/
+.venv/
 __pycache__/
-PDF.pdf
-passages.parquet
-main.py
-eval_data.json
-eval_rag.py
-evale_rag.py
-main_tools.py
-main.py
-index/
-index.tmp/
+*.egg-info/
+.pytest_cache/
+.DS_Store
+
+# Index généré par l'ingestion (se reconstruit avec python -m rag_vehicules.ingest)
+data/index/
+data/index.tmp/
+
+# Données volumineuses de l'ancien code
+legacy/PDF.pdf
+legacy/passages.parquet

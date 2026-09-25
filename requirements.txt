@@ -1,7 +1,0 @@
-# Environnement local complet (API + interface), versions verrouillées.
-# Les images Docker n'utilisent pas ce fichier : chacune installe uniquement le sien.
-#   API / ingestion : requirements-api.txt   (généré depuis requirements-api.in)
-#   Interface       : requirements-front.txt (généré depuis requirements-front.in)
-# Pour modifier une dépendance : éditer le .in, puis relancer pip-compile (voir en-tête du .in).
--r requirements-api.txt
--r requirements-front.txt

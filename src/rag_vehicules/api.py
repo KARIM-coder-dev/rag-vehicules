@@ -2,10 +2,10 @@
 api.py — API HTTP de l'agent RAG véhicules.
 
 Lancement (dev) :
-    uvicorn api:app --reload
+    uvicorn rag_vehicules.api:app --reload
 Documentation interactive générée automatiquement : http://localhost:8000/docs
 
-L'index doit avoir été construit au préalable (python ingest.py) : sinon
+L'index doit avoir été construit au préalable (python -m rag_vehicules.ingest) : sinon
 l'API refuse de démarrer plutôt que de servir des réponses vides.
 """
 
@@ -18,8 +18,8 @@ from typing import Literal
 from fastapi import FastAPI, HTTPException, Request
 from pydantic import BaseModel, Field
 
-from config import get_settings
-from rag_core import ask_agent, build_agent, load_manifest, validate_question
+from rag_vehicules.config import get_settings
+from rag_vehicules.core import ask_agent, build_agent, load_manifest, validate_question
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
 logger = logging.getLogger("rag_api")

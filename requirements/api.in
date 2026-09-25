@@ -1,6 +1,6 @@
-# Dépendances directes de l'API et de l'ingestion (api.py, rag_core.py, ingest.py).
-# Fichier édité à la main. Le fichier verrouillé requirements-api.txt est généré par :
-#     pip-compile requirements-api.in --strip-extras
+# Dépendances directes de l'API et de l'ingestion (src/rag_vehicules/).
+# Fichier édité à la main. Le fichier verrouillé api.txt est généré par (depuis le dossier requirements/) :
+#     pip-compile api.in --strip-extras
 # Les versions sont celles testées ; pip-compile fige aussi toutes les dépendances transitives.
 
 fastapi==0.141.1
@@ -24,7 +24,7 @@ openai==3.3.1
 chromadb==1.5.9
 rank-bm25==0.2.2
 
-# torch est installé à part dans le Dockerfile, en version CPU (voir Dockerfile.api)
+# torch est installé à part dans le Dockerfile, en version CPU (voir docker/Dockerfile.api)
 sentence-transformers==6.0.0
 transformers==5.15.1
 torch==2.13.0

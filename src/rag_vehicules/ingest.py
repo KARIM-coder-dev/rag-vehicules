@@ -2,13 +2,13 @@
 ingest.py — Pipeline d'ingestion : documents → chunks → embeddings → index.
 
 S'exécute à part de l'application, uniquement quand les documents changent :
-    python ingest.py           # réindexe seulement si les sources ont changé
-    python ingest.py --force   # réindexe dans tous les cas
+    python -m rag_vehicules.ingest           # réindexe seulement si les sources ont changé
+    python -m rag_vehicules.ingest --force   # réindexe dans tous les cas
 
-Produit le dossier index/ lu par rag_core.py :
-    index/chroma/        base vectorielle
-    index/chunks.jsonl   chunks bruts (pour reconstruire BM25 sans relire les sources)
-    index/manifest.json  hash des sources + paramètres utilisés pour indexer
+Produit le dossier data/index/ lu par core.py :
+    data/index/chroma/        base vectorielle
+    data/index/chunks.jsonl   chunks bruts (pour reconstruire BM25 sans relire les sources)
+    data/index/manifest.json  hash des sources + paramètres utilisés pour indexer
 
 L'index est construit dans un dossier temporaire puis échangé d'un coup :
 une ingestion qui échoue en cours de route ne laisse jamais un index à moitié écrit.
@@ -27,7 +27,7 @@ from langchain_community.vectorstores import Chroma
 from langchain_openai import OpenAIEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-from config import get_settings
+from rag_vehicules.config import get_settings
 
 BATCH_SIZE = 1000
 

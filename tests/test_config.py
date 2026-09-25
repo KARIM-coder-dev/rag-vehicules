@@ -6,7 +6,7 @@ d'environnement, et refus des configurations invalides au démarrage.
 import pytest
 from pydantic import ValidationError
 
-from config import Settings
+from rag_vehicules.config import Settings
 
 
 @pytest.fixture(autouse=True)

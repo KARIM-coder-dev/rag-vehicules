@@ -11,17 +11,17 @@
 x-api-image: &api-image
   build:
     context: .
-    dockerfile: Dockerfile.api
+    dockerfile: docker/Dockerfile.api
   image: rag-vehicules-api
   env_file: .env
 
 services:
   ingest:
     <<: *api-image
-    command: ["python", "ingest.py"]
+    command: ["python", "-m", "rag_vehicules.ingest"]
     volumes:
       - index-data:/data
-      - ./DATA_TEST:/docs:ro
+      - ./data/docs:/docs:ro
 
   api:
     <<: *api-image
@@ -36,7 +36,7 @@ services:
   front:
     build:
       context: .
-      dockerfile: Dockerfile.front
+      dockerfile: docker/Dockerfile.front
     image: rag-vehicules-front
     environment:
       API_URL: http://api:8000
@@ -47,7 +47,7 @@ services:
         condition: service_healthy
 
 # Volume nommé : l'index survit à l'arrêt et à la reconstruction des conteneurs.
-# Monté sur /data (et non /data/index) pour que ingest.py puisse échanger
+# Monté sur /data (et non /data/index) pour que l'ingestion puisse échanger
 # index.tmp et index dans le même volume.
 volumes:
   index-data:

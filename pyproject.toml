@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rag-vehicules"
+version = "0.1.0"
+description = "Agent RAG sur des données automobiles, exposé en API"
+requires-python = ">=3.13"
+# Les dépendances ne sont pas listées ici : elles sont verrouillées dans
+# requirements/ avec pip-tools (voir requirements/api.in).
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::UserWarning",
+]

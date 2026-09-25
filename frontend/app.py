@@ -1,11 +1,11 @@
 """
-app.py — Interface Streamlit pour discuter avec l'agent RAG véhicules.
+frontend/app.py — Interface Streamlit pour discuter avec l'agent RAG véhicules.
 
-Simple client de l'API (api.py) : aucune logique RAG ici.
+Simple client de l'API (src/rag_vehicules/api.py) : aucune logique RAG ici.
 
 Lancement :
-    uvicorn api:app          # dans un terminal
-    streamlit run app.py     # dans un autre
+    uvicorn rag_vehicules.api:app       # dans un terminal
+    streamlit run frontend/app.py       # dans un autre
 
 L'adresse de l'API se règle avec la variable d'environnement API_URL
 (http://localhost:8000 par défaut).
