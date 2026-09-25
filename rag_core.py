@@ -6,20 +6,13 @@ Ce module NE construit PAS l'index : il lit celui produit par ingest.py
 build_agent() échoue immédiatement avec un message explicite plutôt que
 de réindexer en silence au démarrage de l'application.
 
-Il ne dépend d'aucune interface : app.py (Streamlit) aujourd'hui, une API
-demain, peuvent l'importer de la même façon.
+Il ne dépend d'aucune interface : api.py l'importe, tout autre client
+pourrait le faire de la même façon.
 """
 
-from dotenv import load_dotenv
-load_dotenv()
-
 import json
+import logging
 import os
-
-if os.getenv("LANGCHAIN_TRACING_V2") == "true":
-    print(f"LangSmith activé — projet : {os.getenv('LANGCHAIN_PROJECT', 'default')}")
-else:
-    print("LangSmith désactivé (LANGCHAIN_TRACING_V2 absent ou différent de 'true' dans le .env)")
 
 import requests
 from geopy.distance import geodesic
@@ -35,7 +28,9 @@ from langchain_core.output_parsers import StrOutputParser
 from sentence_transformers import CrossEncoder
 from langgraph.prebuilt import create_react_agent
 
-from config import CHROMA_DIR, CHUNKS_FILE, COLLECTION_NAME, EMBEDDING_MODEL, MANIFEST_FILE
+from config import Settings, get_settings
+
+logger = logging.getLogger(__name__)
 
 
 # ============================================================
@@ -46,39 +41,42 @@ class IndexNotReadyError(RuntimeError):
     """L'index est absent ou a été construit avec une autre configuration."""
 
 
-def _check_manifest():
-    if not os.path.exists(MANIFEST_FILE):
+def load_manifest(settings: Settings) -> dict:
+    """Lit le manifest de l'index et vérifie qu'il est compatible avec la config."""
+    if not settings.manifest_file.exists():
         raise IndexNotReadyError(
             "Index introuvable. Lance d'abord l'ingestion : python ingest.py"
         )
-    with open(MANIFEST_FILE, "r", encoding="utf-8") as f:
+    with open(settings.manifest_file, "r", encoding="utf-8") as f:
         manifest = json.load(f)
 
     # Interroger un index avec un autre modèle d'embedding que celui qui l'a
     # construit ne plante pas : ça renvoie juste de mauvais résultats. On bloque.
-    if manifest.get("embedding_model") != EMBEDDING_MODEL:
-        raise IndexNotReadyError(
-            f"Index construit avec {manifest.get('embedding_model')}, "
-            f"config actuelle : {EMBEDDING_MODEL}. Relance : python ingest.py --force"
-        )
+    for key in ("embedding_model", "collection_name"):
+        if manifest.get(key) != getattr(settings, key):
+            raise IndexNotReadyError(
+                f"Index construit avec {key}={manifest.get(key)}, "
+                f"config actuelle : {getattr(settings, key)}. Relance : python ingest.py --force"
+            )
     return manifest
 
 
-def _load_chunks():
+def _load_chunks(settings: Settings):
     chunks = []
-    with open(CHUNKS_FILE, "r", encoding="utf-8") as f:
+    with open(settings.chunks_file, "r", encoding="utf-8") as f:
         for line in f:
             record = json.loads(line)
             chunks.append(Document(page_content=record["page_content"], metadata=record["metadata"]))
     return chunks
 
 
-def _load_vectorstore(embeddings):
+def _load_vectorstore(settings: Settings, embeddings):
     return Chroma(
-        collection_name=COLLECTION_NAME,
+        collection_name=settings.collection_name,
         embedding_function=embeddings,
-        persist_directory=CHROMA_DIR,
+        persist_directory=str(settings.chroma_dir),
     )
+
 
 def _sanitize_docs(docs):
     suspicious = [
@@ -134,11 +132,11 @@ def validate_question(question: str) -> str:
 
 
 # ============================================================
-# Point d'entrée principal — à appeler UNE SEULE FOIS
-# (Streamlit le mettra en cache avec @st.cache_resource)
+# Point d'entrée principal — à appeler UNE SEULE FOIS par process
+# (api.py le fait au démarrage, dans son lifespan)
 # ============================================================
 
-def build_agent():
+def build_agent(settings: Settings | None = None):
     """
     Construit le pipeline de requête (retrievers, reranker, tools, agent) à
     partir de l'index existant et retourne l'agent prêt à l'emploi.
@@ -147,24 +145,31 @@ def build_agent():
     de ingest.py. Reste coûteux (charge le modèle de reranking) — à appeler
     une seule fois par process.
     """
-    _check_manifest()
-    chunks = _load_chunks()
+    settings = settings or get_settings()
 
-    embeddings = OpenAIEmbeddings(model=EMBEDDING_MODEL)
-    vectorstore = _load_vectorstore(embeddings)
+    if os.getenv("LANGCHAIN_TRACING_V2") == "true":
+        logger.info("LangSmith activé — projet : %s", os.getenv("LANGCHAIN_PROJECT", "default"))
+    else:
+        logger.info("LangSmith désactivé (LANGCHAIN_TRACING_V2 != 'true')")
+
+    load_manifest(settings)
+    chunks = _load_chunks(settings)
+
+    embeddings = OpenAIEmbeddings(model=settings.embedding_model, api_key=settings.openai_api_key)
+    vectorstore = _load_vectorstore(settings, embeddings)
 
     bm25_retriever = BM25Retriever.from_documents(chunks)
-    bm25_retriever.k = 50
-    vector_retriever = vectorstore.as_retriever(search_kwargs={"k": 50})
+    bm25_retriever.k = settings.retriever_k
+    vector_retriever = vectorstore.as_retriever(search_kwargs={"k": settings.retriever_k})
 
     ensemble_retriever = EnsembleRetriever(
         retrievers=[bm25_retriever, vector_retriever],
-        weights=[0.5, 0.5]
+        weights=[settings.bm25_weight, 1 - settings.bm25_weight]
     )
 
-    reranker = CrossEncoder("BAAI/bge-reranker-base")
+    reranker = CrossEncoder(settings.reranker_model)
 
-    def rerank_documents(question, docs, top_k=5, threshold=0.2):
+    def rerank_documents(question, docs, top_k, threshold):
         if not docs:
             return []
         pairs = [[question, doc.page_content] for doc in docs]
@@ -176,10 +181,18 @@ def build_agent():
     def retrieve_and_rerank(question):
         docs = ensemble_retriever.invoke(question)
         docs = _sanitize_docs(docs)
-        docs = rerank_documents(question, docs, top_k=5, threshold=0.2)
+        docs = rerank_documents(
+            question, docs, top_k=settings.rerank_top_k, threshold=settings.rerank_threshold
+        )
         return _format_docs(docs)
 
-    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.3)
+    llm = ChatOpenAI(
+        model=settings.llm_model,
+        temperature=settings.llm_temperature,
+        timeout=settings.llm_timeout_s,
+        max_retries=settings.llm_max_retries,
+        api_key=settings.openai_api_key,
+    )
 
     prompt = ChatPromptTemplate.from_template("""
 Tu réponds uniquement à partir du contexte fourni ci-dessous.
@@ -219,7 +232,7 @@ Réponse :
             "longitude": longitude,
             "current": "temperature_2m,relative_humidity_2m,wind_speed_10m"
         }
-        response = requests.get(url, params=params)
+        response = requests.get(url, params=params, timeout=settings.http_timeout_s)
         response.raise_for_status()
         return response.json()
 
@@ -232,7 +245,7 @@ Réponse :
         
         url = "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/prix-des-carburants-en-france-flux-instantane-v2/records"
         params = {"limit": 100}  # augmente l'échantillon pour avoir des résultats dans le rayon
-        response = requests.get(url, params=params)
+        response = requests.get(url, params=params, timeout=settings.http_timeout_s)
         response.raise_for_status()
         data = response.json()
 

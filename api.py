@@ -9,7 +9,6 @@ L'index doit avoir été construit au préalable (python ingest.py) : sinon
 l'API refuse de démarrer plutôt que de servir des réponses vides.
 """
 
-import json
 import logging
 import time
 import uuid
@@ -19,8 +18,8 @@ from typing import Literal
 from fastapi import FastAPI, HTTPException, Request
 from pydantic import BaseModel, Field
 
-from config import MANIFEST_FILE
-from rag_core import ask_agent, build_agent, validate_question
+from config import get_settings
+from rag_core import ask_agent, build_agent, load_manifest, validate_question
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
 logger = logging.getLogger("rag_api")
@@ -61,16 +60,14 @@ class AskResponse(BaseModel):
 # Cycle de vie — l'agent est construit UNE fois au démarrage du process
 # ============================================================
 
-def load_manifest():
-    with open(MANIFEST_FILE, "r", encoding="utf-8") as f:
-        return json.load(f)
-
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.info("Chargement de l'agent...")
-    app.state.agent = build_agent()
-    app.state.manifest = load_manifest()
+    # Configuration validée avant tout : une variable manquante arrête le
+    # démarrage ici, pas à la première requête d'un utilisateur.
+    settings = get_settings()
+    logger.info("Chargement de l'agent (LLM=%s, k=%d)...", settings.llm_model, settings.retriever_k)
+    app.state.agent = build_agent(settings)
+    app.state.manifest = load_manifest(settings)
     logger.info("Agent prêt (index du %s, %s chunks)",
                 app.state.manifest["indexed_at"], app.state.manifest["nb_chunks"])
     yield

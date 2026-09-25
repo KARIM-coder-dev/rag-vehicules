@@ -1,26 +1,80 @@
 """
-config.py — Paramètres partagés entre l'ingestion (ingest.py) et la requête (rag_core.py).
+config.py — Configuration de l'application, lue depuis les variables d'environnement.
 
-Les deux côtés DOIVENT lire les mêmes valeurs : si la requête utilise un
-autre modèle d'embedding ou une autre collection que l'ingestion, la
-recherche vectorielle renvoie des résultats faux sans lever d'erreur.
+Toute valeur peut être surchargée par une variable d'environnement du même nom
+en majuscules (ex. LLM_MODEL=gpt-4o, RETRIEVER_K=30). En local, elles viennent
+du fichier .env ; en production, elles sont injectées par la plateforme
+(Azure Container Apps, avec les secrets tirés d'Azure Key Vault) : le code ne
+change pas d'un environnement à l'autre.
+
+La configuration est validée au démarrage : une clé manquante ou une valeur
+incohérente fait échouer le lancement immédiatement, avec un message clair,
+plutôt qu'au milieu d'une requête utilisateur.
 """
 
-import os
+from functools import lru_cache
+from pathlib import Path
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+from dotenv import load_dotenv
+from pydantic import Field, SecretStr, model_validator
+from pydantic_settings import BaseSettings
 
-# Source des documents
-DOSSIER_DOCS = os.path.join(BASE_DIR, "DATA_TEST")
+BASE_DIR = Path(__file__).resolve().parent
 
-# Index produit par ingest.py et lu par rag_core.py
-INDEX_DIR = os.path.join(BASE_DIR, "index")
-CHROMA_DIR = os.path.join(INDEX_DIR, "chroma")
-CHUNKS_FILE = os.path.join(INDEX_DIR, "chunks.jsonl")
-MANIFEST_FILE = os.path.join(INDEX_DIR, "manifest.json")
-COLLECTION_NAME = "vehicules"
+# Charge .env dans os.environ (sans écraser les variables déjà définies) :
+# LangSmith lit ses propres variables LANGCHAIN_* directement dans l'environnement.
+load_dotenv(BASE_DIR / ".env")
 
-# Paramètres d'indexation
-CHUNK_SIZE = 600
-CHUNK_OVERLAP = 60
-EMBEDDING_MODEL = "text-embedding-3-large"
+
+class Settings(BaseSettings):
+    # --- Secrets -------------------------------------------------------------
+    # SecretStr : la valeur n'apparaît jamais dans un print, un log ou une trace.
+    # min_length : une variable présente mais vide (OPENAI_API_KEY=) est refusée aussi.
+    openai_api_key: SecretStr = Field(min_length=1)
+
+    # --- Ingestion : changer une de ces valeurs impose de relancer ingest.py --
+    docs_dir: Path = BASE_DIR / "DATA_TEST"
+    index_dir: Path = BASE_DIR / "index"
+    collection_name: str = "vehicules"
+    chunk_size: int = Field(600, gt=0)
+    chunk_overlap: int = Field(60, ge=0)
+    embedding_model: str = "text-embedding-3-large"
+
+    # --- Requête : modifiables sans réindexer --------------------------------
+    llm_model: str = "gpt-4o-mini"
+    llm_temperature: float = Field(0.3, ge=0, le=2)
+    llm_timeout_s: float = Field(60, gt=0)
+    llm_max_retries: int = Field(2, ge=0)
+    retriever_k: int = Field(50, gt=0, le=200)
+    bm25_weight: float = Field(0.5, ge=0, le=1)
+    reranker_model: str = "BAAI/bge-reranker-base"
+    rerank_top_k: int = Field(5, gt=0)
+    rerank_threshold: float = 0.2
+    http_timeout_s: float = Field(10, gt=0)
+
+    @model_validator(mode="after")
+    def _check_coherence(self):
+        if self.chunk_overlap >= self.chunk_size:
+            raise ValueError("CHUNK_OVERLAP doit être inférieur à CHUNK_SIZE")
+        if self.rerank_top_k > self.retriever_k:
+            raise ValueError("RERANK_TOP_K ne peut pas dépasser RETRIEVER_K")
+        return self
+
+    # Chemins dérivés de index_dir
+    @property
+    def chroma_dir(self) -> Path:
+        return self.index_dir / "chroma"
+
+    @property
+    def chunks_file(self) -> Path:
+        return self.index_dir / "chunks.jsonl"
+
+    @property
+    def manifest_file(self) -> Path:
+        return self.index_dir / "manifest.json"
+
+
+@lru_cache
+def get_settings() -> Settings:
+    """Lit et valide la configuration une seule fois par process."""
+    return Settings()

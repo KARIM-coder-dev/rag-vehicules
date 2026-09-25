@@ -6,6 +6,8 @@ en-têtes), pas la qualité des réponses — c'est le rôle de l'évaluation RA
     pytest tests/
 """
 
+from types import SimpleNamespace
+
 import pytest
 from fastapi.testclient import TestClient
 
@@ -34,8 +36,10 @@ class FakeAgent:
 @pytest.fixture
 def agent(monkeypatch):
     fake = FakeAgent()
-    monkeypatch.setattr(api, "build_agent", lambda: fake)
-    monkeypatch.setattr(api, "load_manifest", lambda: FAKE_MANIFEST)
+    # Pas de vraie config : les tests tournent sans clé OpenAI (en CI notamment)
+    monkeypatch.setattr(api, "get_settings", lambda: SimpleNamespace(llm_model="fake", retriever_k=1))
+    monkeypatch.setattr(api, "build_agent", lambda settings: fake)
+    monkeypatch.setattr(api, "load_manifest", lambda settings: FAKE_MANIFEST)
     return fake
 
 
